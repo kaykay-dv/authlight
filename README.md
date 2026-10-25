@@ -20,53 +20,13 @@ Features:
 
 ## Installation
 
-### 1. Create a virtual environment
-
-macOS / Linux:
+Install the library directly from [GitHub](https://github.com/kaykay-dv/authlight/):
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+pip install "git+https://github.com/kaykay-dv/authlight/"
 ```
 
-Windows (PowerShell):
-
-```powershell
-py -m venv .venv
-.venv\Scripts\Activate.ps1
-```
-
-### 2. Install the package from the .tar.gz file
-
-django-authlight is distributed as a source archive (`.tar.gz`), e.g. `django_authlight-0.1.0.tar.gz`. It is not published on PyPI. Copy the file to the machine and install it into the activated virtual environment:
-
-```bash
-python -m pip install /path/to/django_authlight-<version>.tar.gz
-```
-
-Replace the path and version with the file you received. All runtime dependencies (Django, Django REST framework, djangorestframework-simplejwt, django-axes, drf-spectacular, cryptography) are installed automatically.
-
-**Hint:** The library can also be installed directly from [GitHub](https://github.com/kaykay-dv/authlight/), without downloading a `.tar.gz` file first:
-
-```bash
-python -m pip install "git+https://github.com/kaykay-dv/authlight/"
-```
-
-Check that the installation worked:
-
-```bash
-python -m pip show django-authlight
-authlight --help
-```
-
-To upgrade later, install the newer archive the same way and re-apply migrations from your deployment directory (see step 3):
-
-```bash
-python -m pip install --upgrade /path/to/django_authlight-<new-version>.tar.gz
-authlight migrate
-```
-
-### 3. Initialize a deployment directory
+### 1. Initialize a deployment directory
 
 The service reads its configuration from a `.env` file in the **current working directory**, so give it a dedicated directory and run all `authlight` commands from there:
 
@@ -87,7 +47,7 @@ authlight init
 
 Running `authlight init` again leaves an existing `.env` and key pair untouched. `authlight init --force` replaces them — this rotates the secret and the signing key, so existing sessions and tokens will no longer validate.
 
-### 4. Create an administrator and start the server
+### 2. Create an administrator and start the server
 
 ```bash
 authlight createsuperuser
@@ -248,13 +208,11 @@ Tenant admin forms cannot set staff status, superuser status, or Django permissi
 
 ## Development
 
-From a source checkout, build the `.tar.gz` distribution (this creates the archive used in the installation steps above; it requires the `build` package) and install it with the development extras:
+From a source checkout, build the `.tar.gz` distribution (it requires the `build` package) and install it with the development extras:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
 python -m build
-python -m pip install "dist/django_authlight-<version>.tar.gz[dev]"
+pip install "dist/django_authlight-<version>.tar.gz[dev]"
 pytest
 ```
 
