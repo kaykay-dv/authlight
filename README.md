@@ -2,6 +2,8 @@
 
 A self-contained Django service that acts as a central authentication provider. It issues JSON Web Tokens (JWTs) that other services can verify with a public key — no shared secret and no callback to this service required.
 
+django-authlight is built for **educational use**: a small, readable alternative to [Keycloak](https://www.keycloak.org/) for teaching how JWT authentication works. Keycloak is a full identity platform; this service is the lightweight counterpart that shows the same idea — issue a signed token, verify it elsewhere — without the operational weight.
+
 django-authlight is a standalone service, not a reusable Django app: you install the package, initialize a deployment directory, and run it with the bundled `authlight` command. It is not added to an existing Django project's `INSTALLED_APPS`.
 
 Features:
@@ -64,6 +66,7 @@ Then open:
 
 | URL | What |
 | --- | --- |
+| http://127.0.0.1:8000/ | Redirects to the Django admin — the simplest way to log in to the console |
 | http://127.0.0.1:8000/console/ | Django admin (sign in with the superuser) |
 | http://127.0.0.1:8000/api/docs/ | Interactive OpenAPI documentation |
 | http://127.0.0.1:8000/api/docs/schema/ | OpenAPI schema document |
