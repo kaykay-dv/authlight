@@ -192,32 +192,6 @@ The Django admin is at `/console/` (`/admin/` is not served).
 
 Tenant admin forms cannot set staff status, superuser status, or Django permissions. Groups they create are labels carried in the JWT `groups` claim. Users created through the API have no owner, so only superusers see them in the admin.
 
-## Production notes
-
-- Set `DJANGO_DEBUG=false`, use a long random `DJANGO_SECRET_KEY`, and set `DJANGO_ALLOWED_HOSTS` to your domain.
-- Run the service from its deployment directory (the one containing `.env` and the key files) so configuration and keys are found.
-- `authlight runserver` is a development server. For production, serve `authlight.project.wsgi:application` with a WSGI server, for example with Gunicorn (if it is available in your environment):
-
-  ```bash
-  gunicorn --chdir /path/to/authlight-data authlight.project.wsgi:application --bind 127.0.0.1:8000
-  ```
-
-- Terminate TLS in front of the service (e.g. a reverse proxy). The token endpoints and admin login should only be reachable over HTTPS in production.
-- Back up `.env`, `jwt_private.pem`, and the database together. Losing the private key means all outstanding tokens can no longer be verified by this service's key set; replacing it invalidates them.
-- Serving the admin under `/console/` only keeps it out of generic `/admin/` scans — access control and the axes lockout are what actually protect it.
-
-## Development
-
-From a source checkout, build the `.tar.gz` distribution (it requires the `build` package) and install it with the development extras:
-
-```bash
-python -m build
-pip install "dist/django_authlight-<version>.tar.gz[dev]"
-pytest
-```
-
-The archive is written to `dist/` alongside a wheel.
-
 ## Troubleshooting
 
 | Symptom | Fix |
