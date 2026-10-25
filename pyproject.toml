@@ -31,6 +31,9 @@ authlight = "authlight.project.manage:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+authlight = ["templates/**/*.html"]
+
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "authlight.project.settings"
 pythonpath = ["src"]

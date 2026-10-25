@@ -63,6 +63,21 @@ def _create_group(client, name):
     post_admin(client, f"{ADMIN}auth/group/add/", {"name": name})
 
 
+def test_root_redirects_to_console():
+    client = Client()
+    response = client.get("/")
+    assert response.status_code == 302
+    assert response["Location"] == "/console/"
+
+
+@pytest.mark.django_db
+def test_admin_header_links_to_api_docs(superuser):
+    client = Client()
+    client.force_login(superuser)
+    html = client.get(ADMIN).content.decode()
+    assert '<a href="/api/docs/">API docs</a>' in html
+
+
 @pytest.mark.django_db
 def test_admin_is_not_served_under_the_default_path(superuser):
     client = Client()

@@ -80,7 +80,9 @@ ASGI_APPLICATION = "authlight.project.asgi.application"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        # authlight's own templates first, so admin/base_site.html
+        # overrides django.contrib.admin's.
+        "DIRS": [Path(__file__).resolve().parent.parent / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
