@@ -165,13 +165,15 @@ The admin login returns Axes' default HTML lockout response (HTTP 429). A succes
 
 Verifying services only need the public key — never share `jwt_private.pem` or `DJANGO_SECRET_KEY` with them.
 
-Every token header carries `jku` (the JWK Set URL) and `kid` (the key id), so verification can resolve the key automatically. With PyJWT:
+Every token header carries `jku` (the JWK Set URL) and `kid` (the key id), so verification can resolve the key automatically. This example uses the [PyJWT](https://pyjwt.readthedocs.io/en/stable/) library — install it in the verifying service first (`pip install PyJWT`). It assumes the auth service runs locally on port 8000, as started above, so you can copy-paste it as-is:
 
 ```python
 import jwt
 from jwt import PyJWKClient
 
-jwks_client = PyJWKClient("https://auth.example.com/api/keys/")
+access_token = "..."  # paste an access token from POST /api/token/ here
+
+jwks_client = PyJWKClient("http://localhost:8000/api/keys/")
 signing_key = jwks_client.get_signing_key_from_jwt(access_token)
 
 payload = jwt.decode(
@@ -181,6 +183,7 @@ payload = jwt.decode(
 )
 user_id = payload["user_id"]
 groups = payload["groups"]
+print(user_id, groups)
 ```
 
 Alternatively, fetch the PEM once from `GET /api/keys/public/`, cache it, and pass it to `jwt.decode(...)` with `algorithms=["RS256"]`. Pasting a token into [jwt.io](https://jwt.io) also works: it follows `jku` and selects the key by `kid`. Note that `jku` must be reachable over HTTPS for jwt.io to fetch it; set `JWT_JWKS_URL` if the public URL differs from the request host.
