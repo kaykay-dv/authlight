@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-authlight"
+version = "0.1.0"
+description = "Self-contained Django JWT authentication provider."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "Django>=5.2,<6",
+    "djangorestframework>=3.15,<4",
+    "djangorestframework-simplejwt>=5.5,<6",
+    "django-axes>=7,<9",
+    "django-environ>=0.11,<0.13",
+    "drf-spectacular>=0.27,<1",
+    "drf-spectacular-sidecar>=2024.1",
+    "cryptography>=43",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-django>=4.9",
+]
+
+[project.scripts]
+authlight = "authlight.project.manage:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "authlight.project.settings"
+pythonpath = ["src"]
+testpaths = ["tests"]

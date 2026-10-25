@@ -1,0 +1,15 @@
+.env
+jwt_private.pem
+jwt_public.pem
+*.sqlite3
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.coverage
+htmlcov/
+.DS_Store
