@@ -46,6 +46,12 @@ python -m pip install /path/to/django_authlight-<version>.tar.gz
 
 Replace the path and version with the file you received. All runtime dependencies (Django, Django REST framework, djangorestframework-simplejwt, django-axes, drf-spectacular, cryptography) are installed automatically.
 
+**Hint:** The library can also be installed directly from [GitHub](https://github.com/kaykay-dv/authlight/), without downloading a `.tar.gz` file first:
+
+```bash
+python -m pip install "git+https://github.com/kaykay-dv/authlight/"
+```
+
 Check that the installation worked:
 
 ```bash
