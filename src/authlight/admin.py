@@ -12,6 +12,34 @@ from authlight.models import User
 admin.site.unregister(Group)
 
 
+class AuthlightAdminSite(admin.AdminSite):
+    """Admin index layout: Users and Groups pooled in one section.
+
+    Only the grouping/labelling of the index changes — the models keep
+    their own apps, so URLs (e.g. /console/authlight/user/) and the
+    database layout are untouched.
+    """
+
+    def get_app_list(self, request, app_label=None):
+        app_list = super().get_app_list(request, app_label)
+        by_label = {app["app_label"]: app for app in app_list}
+
+        auth_app = by_label.get("auth")
+        if auth_app is not None:
+            auth_app["name"] = _("Authentication and Authorization")
+            authlight_app = by_label.get("authlight")
+            if authlight_app is not None and app_label is None:
+                auth_app["models"].extend(authlight_app["models"])
+                auth_app["models"].sort(key=lambda model: model["name"])
+                app_list.remove(authlight_app)
+
+        app_list.sort(key=lambda app: app["name"])
+        return app_list
+
+
+admin.site.__class__ = AuthlightAdminSite
+
+
 class OwnedObjectAdmin(admin.ModelAdmin):
     """Return 404 when an object is outside the caller's queryset."""
 

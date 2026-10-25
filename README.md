@@ -54,6 +54,12 @@ authlight createsuperuser
 authlight runserver
 ```
 
+By default the server listens on port 8000. To run it on a different port, pass the port to `runserver` — and use that port in the URLs below instead of `8000`:
+
+```bash
+authlight runserver 8080
+```
+
 Then open:
 
 | URL | What |

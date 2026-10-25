@@ -132,6 +132,8 @@ AXES_FAILURE_LIMIT = env("AXES_FAILURE_LIMIT")
 AXES_COOLOFF_TIME = timedelta(hours=env("AXES_COOLOFF_HOURS"))
 AXES_RESET_ON_SUCCESS = True
 AXES_LOCKOUT_CALLABLE = "authlight.lockout.lockout_response"
+# Keep axes' records out of the Django admin; the lockout itself is unaffected.
+AXES_ENABLE_ADMIN = False
 
 
 def _key_path(name: str, default: str) -> Path:

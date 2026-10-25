@@ -75,6 +75,28 @@ def test_admin_is_not_served_under_the_default_path(superuser):
 
 
 @pytest.mark.django_db
+def test_admin_index_pools_users_and_groups_and_hides_axes(superuser):
+    client = Client()
+    client.force_login(superuser)
+    response = client.get(ADMIN)
+    assert response.status_code == 200
+
+    sections = {
+        app["name"]: {model["object_name"] for model in app["models"]}
+        for app in response.context["app_list"]
+    }
+    assert {"User", "Group"} <= sections["Authentication and Authorization"]
+    assert "Authlight" not in sections
+    assert "Axes" not in sections
+    assert "Logs and security" not in sections
+
+    # axes models are not registered in the admin at all
+    assert client.get(f"{ADMIN}axes/accessattempt/").status_code == 404
+    assert client.get(f"{ADMIN}axes/accesslog/").status_code == 404
+    assert client.get(f"{ADMIN}axes/accessfailurelog/").status_code == 404
+
+
+@pytest.mark.django_db
 def test_tenant_admins_see_only_rows_they_created(admin_a, admin_b, superuser):
     client_a = Client()
     client_a.force_login(admin_a)
