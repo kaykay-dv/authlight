@@ -38,6 +38,10 @@ def test_write_default_env_uses_local_defaults(tmp_path):
     assert "API_THROTTLE_USER=500/hour" in text
     assert "API_THROTTLE_USER_CREATE_ANON=5/hour" in text
     assert "API_THROTTLE_USER_CREATE_USER=5/hour" in text
+    assert (
+        "CORS_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,"
+        "http://localhost:3000,http://127.0.0.1:3000"
+    ) in text
     assert stat.S_IMODE(env_file.stat().st_mode) == 0o600
 
     assert write_default_env(env_file) is False

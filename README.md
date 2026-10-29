@@ -14,6 +14,7 @@ Features:
 - Interactive OpenAPI documentation at `/api/docs/`
 - Django admin at `/console/` with tenant isolation: staff users in the **Tenant admins** group only see the users and groups they created; superusers see everything
 - Login lockout with django-axes and separate rate limits for anonymous and authenticated API traffic
+- CORS on `/api/*` so a frontend (SPA) on another origin can log in, refresh tokens, and manage users
 
 ## Requirements
 
@@ -94,6 +95,7 @@ Settings are read from `.env` in the working directory (see `.env.example` in th
 | `API_THROTTLE_USER` | Rate for requests with a valid access token, per user. Default `500/hour`. |
 | `API_THROTTLE_USER_CREATE_ANON` | `POST /api/users/` without an access token. Default `5/hour`. |
 | `API_THROTTLE_USER_CREATE_USER` | `POST /api/users/` with a valid access token. Default `5/hour`. |
+| `CORS_ALLOWED_ORIGINS` | Comma-separated origins allowed to call `/api/*` from the browser (SPA login). Default `http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000`. Tokens are sent as `Authorization: Bearer …` — cookies are not used. `GET /api/keys/` always allows any origin so [jwt.io](https://jwt.io) can follow `jku`. |
 
 ## API
 

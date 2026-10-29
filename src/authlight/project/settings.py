@@ -57,12 +57,14 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "drf_spectacular",
     "drf_spectacular_sidecar",
+    "corsheaders",
     "axes",
     "authlight.apps.AuthlightConfig",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -165,6 +167,29 @@ SIMPLE_JWT = {
 
 # Absolute JWK Set URL written into issued tokens. Empty uses the request host.
 JWT_JWKS_URL = env.str("JWT_JWKS_URL", default="")
+
+# SPA login from another origin (e.g. Vite on :5173). Bearer tokens only —
+# no cookies — so credentials are off and an allowlist is enough.
+# GET /api/keys/ still sets Access-Control-Allow-Origin: * for jwt.io.
+DEFAULT_CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+CORS_ALLOWED_ORIGINS = [
+    origin
+    for origin in env.list("CORS_ALLOWED_ORIGINS", default=DEFAULT_CORS_ALLOWED_ORIGINS)
+    if origin
+]
+CORS_ALLOW_CREDENTIALS = False
+CORS_URLS_REGEX = r"^/api/.*$"
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "authorization",
+    "content-type",
+    "origin",
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
